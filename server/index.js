@@ -21,8 +21,9 @@ app.use(bodyParser.json())
 app.use(cors())
 
 const AuthRouter = require('./routes/authRouter')
+const Home = require('./routes/Home')
 app.use('/api/v1/auth', AuthRouter)
-
+app.use('/home', Home);
 app.listen(PORT, ()=>{
-    console.log("Server running on PORT 5000")
+    console.log(`Server running on PORT ${PORT}`)
 })
