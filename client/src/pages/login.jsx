@@ -43,9 +43,10 @@ const Login = () => {
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-base font-medium text-gray-700">
+            <label className="block text-base font-medium text-gray-700">
               Email
             </label>
+            <div className="mt-2">
             <input
               id="email"
               name="email"
@@ -53,14 +54,16 @@ const Login = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 focus:ring focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
             />
+            </div>
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-base font-medium text-gray-700">
+            <label  className="block text-base font-medium text-gray-700">
               Password
             </label>
+            <div className="mt-2">
             <input
               id="password"
               name="password"
@@ -68,8 +71,9 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 focus:ring focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
             />
+          </div>
           </div>
 
           <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-200">
