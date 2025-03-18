@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Signup from "./Signup";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,20 +13,17 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous errors
+    setError("");
 
     try {
-      const response = await axios.post("YOUR_BACKEND_LOGIN_API", formData, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true, // If using cookies
-      });
-
+      const response = await axios.post("http://localhost:5000/api/v1/auth/login", formData);
       if (response.data.success) {
-        localStorage.setItem("token", response.data.token); // Store token if using JWT
-        alert("Login successful!");
-        navigate("/dashboard"); // Redirect after login
-      } else {
-        setError("Invalid credentials");
+        localStorage.setItem("token", response.data.jwtToken);
+        localStorage.setItem(
+          "user",
+          JSON.stringify({ email: response.data.email, name: response.data.name })
+        );
+        navigate("/Home"); 
       }
     } catch (err) {
       setError(err.response?.data?.message || "Login failed. Try again.");
@@ -41,10 +34,13 @@ const Login = () => {
     <div className="flex min-h-full flex-1 flex-col justify-center mt-20 px-10 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <div className="text-3xl flex font-bold items-center justify-center text-blue-500">AuthBase</div>
-        <h2 className="mt-10 text-center text-2xl font-bold text-gray-900">Sign in to your account</h2>
+        <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">
+          Sign in to your account
+        </h2>
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="email" className="block text-base font-medium text-gray-700">
@@ -57,7 +53,7 @@ const Login = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 focus:outline-blue-500"
+              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 focus:ring focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </div>
 
@@ -72,20 +68,18 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 focus:outline-blue-500"
+              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 focus:ring focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </div>
-
-          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-200">
             Sign in
           </button>
         </form>
 
-        <p className="mt-4 text-center text-base text-gray-500">
+        <p className="mt-10 text-center text-base text-gray-500">
           Not a member?{" "}
-          <a href="/Signup" className="font-semibold text-blue-500 hover:text-blue-700">
+          <a href="/signup" className="font-semibold text-blue-500 hover:text-blue-700">
             Sign up here
           </a>
         </p>
