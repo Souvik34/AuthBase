@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Login from "./Login";
+
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -115,9 +117,9 @@ const Signup = () => {
               onChange={handleChange}
               required
             />
-            <label className="ml-2 text-sm text-gray-600">
+            <label className="ml-2 text-base text-gray-600">
               I accept the{" "}
-              <a href="#" className="text-blue-500 hover:underline">
+              <a href="#" className=" font-semibold text-blue-500 hover:underline">
                 Terms and Conditions
               </a>
             </label>
@@ -131,9 +133,9 @@ const Signup = () => {
             Sign Up
           </button>
 
-          <p className="text-center text-sm text-gray-600">
+          <p className="text-center text-base text-gray-600">
             Already have an account?{" "}
-            <a href="#" className="text-blue-500 hover:underline">
+            <a href="/Login" className=" font-semibold text-blue-500">
               Login here
             </a>
           </p>
