@@ -1,13 +1,13 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import Login from './pages/login'
-import Signup from './pages/signup'
-import Home from './pages/home'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
+import Home from './pages/Home'
 
 const App = () => {
   return (
     <>
-    <div className='text-3xl flex mt-52 font-bold items-center justify-center text-blue-500'>AuthBase</div>
+ 
     <Routes>
 
       <Route path='/' element={<Navigate to= '/login'/>} />
