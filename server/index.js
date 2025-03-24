@@ -2,6 +2,7 @@ const express = require('express');
 const app= express();
 
 require('dotenv').config()
+console.log("EMAIL_SECRET:", process.env.EMAIL_SECRET); // Debugging line
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -21,7 +22,7 @@ const cookieParser = require("cookie-parser");
 app.use(bodyParser.json());
 app.use(cookieParser()); 
 app.use(cors({
-    origin: "http://localhost:5000", 
+    origin: "http://localhost:5173", 
     credentials: true
 }));
 

@@ -26,6 +26,15 @@ const signup = async (req, res) => {
         const newUser = new UserModel({ name, email, password: hashedPassword, isVerified: false });
         await newUser.save();
 
+        // Ensure EMAIL_SECRET is properly set
+        if (!process.env.EMAIL_SECRET) {
+            console.error("EMAIL_SECRET is missing. Check your .env file!");
+            return res.status(500).json({
+                message: "Internal server error: Email verification is misconfigured",
+                success: false
+            });
+        }
+
         // Generate Email Verification Token
         const emailToken = jwt.sign(
             { email: newUser.email },
@@ -55,6 +64,7 @@ const signup = async (req, res) => {
         });
     }
 };
+
 
 
 
