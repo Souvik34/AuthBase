@@ -40,46 +40,73 @@ const login = async (req, res) => {
             });
         }
 
+        const isPassEqual = await bcrypt.compare(password, user.password);
+        if (!isPassEqual) {
+            return res.status(403).json({
+                message: 'Password does not match!',
+                success: false
+            });
+        }
 
-       const isPassEqual = await bcrypt.compare(password, user.password)
-       if(!isPassEqual)
-       {
-        return res.status(403).json({
-            message: 'Password do not match!',
-            success: false
+        // Generate Access Token (Short-lived)
+        const accessToken = jwt.sign(
+            { email: user.email, _id: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: '15m' }
+        );
+
+        // Generate Refresh Token (Long-lived)
+        const refreshToken = jwt.sign(
+            { email: user.email, _id: user._id },
+            process.env.REFRESH_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        // Store Refresh Token in HTTP-only cookie
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         });
-       }
 
-       const jwtToken= jwt.sign({email: user.email, _id: user._id},
-        process.env.JWT_SECRET, {expiresIn: '24h'}
-       )
         res.status(200).json({
             message: 'Login Successfully',
             success: true,
-            jwtToken,
-            email,
-            name: user.name
-
+            accessToken, // Sent to frontend
+            name: user.name,
+            email
         });
+
     } catch (error) {
-        console.error('Error during signup:', error);
+        console.error('Error during login:', error);
         res.status(500).json({
             message: 'Internal server error',
             success: false
         });
     }
 };
-const signout = async (req, res, next) => {
-    
+
+
+const signout = async (req, res) => {
     try {
-        res.clearCookie("access_token")
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "Strict"
+        });
+
         res.status(200).json({
-            success:true,
-            message:"User logged out successfully!",
-            
-        })
+            success: true,
+            message: "User logged out successfully!"
+        });
     } catch (error) {
-        next(error)
+        res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
     }
-}
+};
+
+
 module.exports = { signup, login, signout};

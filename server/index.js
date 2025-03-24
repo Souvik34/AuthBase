@@ -15,9 +15,16 @@ mongoose.connect(MONGODB_URI).then(() => {
 
 const PORT= process.env.PORT || 5000;
 
+const cookieParser = require("cookie-parser");
 
-app.use(bodyParser.json())
-app.use(cors())
+app.use(bodyParser.json());
+app.use(cookieParser()); 
+app.use(cors({
+    origin: "http://localhost:5000", 
+    credentials: true
+}));
+
+
 
 const AuthRouter = require('./routes/authRouter')
 const Home = require('./routes/Home')
