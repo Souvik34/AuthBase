@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const MONGODB_URI = process.env.MONGODB_URI;
 const cors  = require('cors')
+const passport = require('./Config/Passport');
 
 
 mongoose.connect(MONGODB_URI).then(() => {
@@ -35,6 +36,7 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ success: false, message: 'Internal Server Error' });
 });
+app.use(passport.initialize());
 
 app.listen(PORT, ()=>{
     console.log(`Server running on PORT ${PORT}`)
